@@ -1,8 +1,3 @@
-Certainly! Here’s the updated `README.md` with a **Clean Architecture Folder Structure** section, which shows how the app is organized according to Clean Architecture principles. The folder structure you described includes models, services, stores, presentations, utilities, and routers, with modular organization under the presentation layer.
-
-### Full `README.md` with Clean Architecture Folder Structure:
-
-```markdown
 # Flutter Project
 
 
