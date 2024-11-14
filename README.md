@@ -34,8 +34,8 @@ Make sure you have the following installed:
    Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/your-flutter-project.git
-   cd your-flutter-project
+   git clone https://github.com/yourusername/finance_house_task.git
+   cd finance_house_task
    ```
 
 2. **Install Dependencies**
