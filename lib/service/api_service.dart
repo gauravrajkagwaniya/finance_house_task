@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../app_config.dart';
-import '../global.dart';
+import '../model/app_error.dart';
+import '../utils/extra_strings.dart';
+import '../utils/util_methods.dart';
+
 
 // Base URL for API requests, typically loaded from app configuration
 // ignore: non_constant_identifier_names

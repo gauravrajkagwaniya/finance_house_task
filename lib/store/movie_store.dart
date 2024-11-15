@@ -3,7 +3,6 @@ import 'package:finance_house_task/service/fav_movie_service.dart';
 import 'package:finance_house_task/service/movie_service.dart';
 import 'package:finance_house_task/store/root_store.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:isar/isar.dart';
 import 'package:mobx/mobx.dart';
 import '../model/movie/movie.dart';
 import '../model/movie/trailer.dart';
@@ -74,7 +73,7 @@ abstract class _MovieStore with Store {
 
   // Computed property to check if a movie is marked as a favorite
   @computed
-  Iterable<Id> get favMovieIdList => favMovies.map((favMovie) => favMovie.id);
+  Iterable<int> get favMovieIdList => favMovies.map((favMovie) => favMovie.id);
 
   // Computed property to check if all movie sections have finished loading
   @computed
@@ -121,8 +120,7 @@ abstract class _MovieStore with Store {
     }
     isLoadingPopular = true;
     try {
-      final movieData = await MovieService()
-          .getPopularMovies(pageNo: isForceRefresh ? 1 : popularPage + 1);
+      final movieData = await MovieService().getPopularMovies(pageNo: isForceRefresh ? 1 : popularPage + 1);
       if (movieData == null) {
         return;
       }
@@ -146,7 +144,6 @@ abstract class _MovieStore with Store {
       //todo handle error and toast
       UtilMethods.kPrintMessage("Error getPopularMovies: $e");
       UtilMethods.showToast(e);
-      return;
     } finally {
       isLoadingPopular = false;
     }
@@ -331,9 +328,7 @@ abstract class _MovieStore with Store {
   Future<void> removeFav(Movie movie) async {
     await FavMovieService().removeFavMovie(movie);
     favMovies.remove(movie);
-    if (favMovies.isEmpty) {
-      getFavMovieList();
-    }
+    favMovies = List.from(favMovies);
     UtilMethods.kPrintMessage("fav movoe length  $favMovies");
   }
 }

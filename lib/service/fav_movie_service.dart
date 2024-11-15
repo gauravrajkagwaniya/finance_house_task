@@ -10,33 +10,26 @@ class FavMovieService {
 
   static final FavMovieService _instance = FavMovieService._internal();
 
-  Isar get isar => IsarService().isar;
   // Function to retrieve all favorite movies from the Isar database
   // Returns a list of Movie objects
   Future<List<Movie>> getAllFavMovie() async {
-    return await isar.movies
-        .where()
-        .findAll(); // Fetch all movies stored in the database
+    return await IsarService().getAllMovies(); // Fetch all movies stored in the database
   }
 
   // Function to remove a movie from the list of favorite movies
   // It deletes the movie from the Isar database based on its ID
   Future<void> removeFavMovie(Movie? movie) async {
-    await isar.writeTxn(() async {
-      if (movie != null) {
-        isar.movies.delete(movie.id); // Delete the movie from the database
-      }
-    });
+    if(movie!=null){
+      await IsarService().deleteMovie(movie);
+    }
   }
 
   // Function to add a movie to the list of favorite movies
   // It saves the movie to the Isar database
   Future<void> addFavMovie({Movie? movie}) async {
-    await isar.writeTxn(() async {
-      if (movie != null) {
-        isar.movies.put(movie); // Add or update the movie in the database
-      }
-    });
+    if(movie!=null){
+      await IsarService().addMovie(movie);
+    }
   }
 
 }

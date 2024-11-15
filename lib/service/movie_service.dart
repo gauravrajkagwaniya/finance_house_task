@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:finance_house_task/service/cache_service.dart';
 import 'package:finance_house_task/utils/enum.dart';
-import '../global.dart';
 import '../model/movie/movie.dart';
 import '../model/movie/trailer.dart';
+import '../utils/util_methods.dart';
+import 'api_service.dart';
 
 // Service class to interact with movie-related API endpoints
 class MovieService extends APIService {
@@ -28,15 +29,21 @@ class MovieService extends APIService {
       }
       return parsedObj(response);
     } on SocketException catch (e) {
-      UtilMethods.showToast(e);
-    } catch (e) {
-      UtilMethods.showToast(e);
-    } finally {
       if (pageNo == 1) {
         final response =
-            await CacheService().getResFromCache(CacheService.popularDataKey);
+        await CacheService().getResFromCache(CacheService.popularDataKey);
         return parsedObj(response);
       }
+      UtilMethods.showToast(e);
+    } catch (e) {
+      if (pageNo == 1) {
+        final response =
+        await CacheService().getResFromCache(CacheService.popularDataKey);
+        return parsedObj(response);
+      }
+      UtilMethods.showToast(e);
+    } finally {
+
     }
     return null;
   }
@@ -56,15 +63,19 @@ class MovieService extends APIService {
       }
       return parsedObj(response);
     } on SocketException catch (e) {
-      UtilMethods.showToast(e);
-    } catch (e) {
-      UtilMethods.showToast(e);
-    } finally {
       if (pageNo == 1) {
-        final response = await CacheService()
-            .getResFromCache(CacheService.nowPlayingDataKey);
+        final response = await CacheService().getResFromCache(CacheService.nowPlayingDataKey);
         return parsedObj(response);
       }
+      UtilMethods.showToast(e);
+    } catch (e) {
+      if (pageNo == 1) {
+        final response = await CacheService().getResFromCache(CacheService.nowPlayingDataKey);
+        return parsedObj(response);
+      }
+      UtilMethods.showToast(e);
+    } finally {
+
     }
     return null;
   }
@@ -99,15 +110,21 @@ class MovieService extends APIService {
       }
       return parsedObj(response);
     } on SocketException catch (e) {
-      UtilMethods.showToast(e);
-    } catch (e) {
-      UtilMethods.showToast(e);
-    } finally {
       if (pageNo == 1) {
         final response =
-            await CacheService().getResFromCache(CacheService.topRatedDataKey);
+        await CacheService().getResFromCache(CacheService.topRatedDataKey);
         return parsedObj(response);
       }
+      UtilMethods.showToast(e);
+    } catch (e) {
+      if (pageNo == 1) {
+        final response =
+        await CacheService().getResFromCache(CacheService.topRatedDataKey);
+        return parsedObj(response);
+      }
+      UtilMethods.showToast(e);
+    } finally {
+
     }
     return null;
   }

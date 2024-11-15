@@ -1,4 +1,4 @@
-import 'package:finance_house_task/service/cache_service.dart';
+import 'package:finance_house_task/service/image_cache_service.dart';
 import 'package:finance_house_task/service/isar_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +13,6 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
   await IsarService().initializeIsar();
-  await CacheService().initCacheImg();
+  await ImageCacheService().initCacheImg();
   runApp(const MyApp());
 }
