@@ -228,10 +228,10 @@ lib/
 
 ## Running Unit Tests
 
-To run unit tests for the project, you can use the following command:
+To run unit tests for the project, you can use the following command at once:
 
 ```bash
-flutter test test/movie_store_test.dart
+ flutter test test/movie_service_test.dart && flutter test test/fav_movie_service_test.dart && flutter test test/theme_store_test.dart && flutter test test/movie_store_test.dart
 ```
 
 This will run the tests in the specified file (`movie_store_test.dart`). If you'd like to run all

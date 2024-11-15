@@ -6,8 +6,9 @@
 import 'dart:async' as _i3;
 
 import 'package:finance_house_task/model/movie/movie.dart' as _i4;
-import 'package:finance_house_task/service/fav_movie_service.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+
+import 'favorites_service.fake.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -50,11 +51,10 @@ class MockFavMovieService extends _i1.Mock implements _i2.FavMovieService {
       ) as _i3.Future<void>);
 
   @override
-  _i3.Future<void> addFavMovie({_i4.Movie? movie}) => (super.noSuchMethod(
+  _i3.Future<void> addFavMovie(_i4.Movie? movie) => (super.noSuchMethod(
         Invocation.method(
           #addFavMovie,
-          [],
-          {#movie: movie},
+          [movie],
         ),
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),

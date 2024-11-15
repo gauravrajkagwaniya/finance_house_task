@@ -46,11 +46,6 @@ class CustomList extends StatelessWidget {
                               overflow: TextOverflow.fade)),
 
                       const SizedBox(height: 5),
-                      const Text(
-                        'Genres: todo',
-                        style: TextStyle(color: Colors.black87),
-                      ),
-                      const SizedBox(height: 5),
                       Text(
                         '⭐ ${movie.voteAverage?.ceil()}/10',
                         style: const TextStyle(color: Colors.amber),

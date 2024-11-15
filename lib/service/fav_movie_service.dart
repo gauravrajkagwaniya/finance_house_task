@@ -1,5 +1,4 @@
 import 'package:finance_house_task/service/isar_service.dart';
-import 'package:isar/isar.dart';
 import '../model/movie/movie.dart';
 
 class FavMovieService {

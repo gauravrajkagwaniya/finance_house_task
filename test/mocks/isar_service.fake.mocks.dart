@@ -6,6 +6,7 @@
 import 'dart:async' as _i3;
 
 import 'package:finance_house_task/model/movie/movie.dart' as _i4;
+import 'package:finance_house_task/utils/enum.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 import 'isar_service.fake.dart' as _i2;
@@ -69,4 +70,33 @@ class MockIsarService extends _i1.Mock implements _i2.IsarService {
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> saveResToCache(
+    _i5.MovieSectionsEnum? section,
+    String? url,
+    String? res,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveResToCache,
+          [
+            section,
+            url,
+            res,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<Map<String, dynamic>?> getResFromCache(String? url) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getResFromCache,
+          [url],
+        ),
+        returnValue: _i3.Future<Map<String, dynamic>?>.value(),
+      ) as _i3.Future<Map<String, dynamic>?>);
 }

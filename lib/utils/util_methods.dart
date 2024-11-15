@@ -54,13 +54,6 @@ abstract class UtilMethods {
     return Theme.of(context).textTheme;
   }
 
-  ///helper widget custom image
-  // static Widget imageCustom({required String url}){
-  //   return CachedNetworkImage(
-  //     imageUrl:url, fit: BoxFit.cover,
-  //     errorWidget: (context, url, error) => const Icon(Icons.error),
-  //   );
-  // }
 
   ///helper for image uri
   static String imgUrl(String absUrl) {

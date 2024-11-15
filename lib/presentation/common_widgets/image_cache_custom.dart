@@ -18,6 +18,7 @@ class ImageCacheCustom extends StatelessWidget {
         url: url,
         fit: BoxFit.cover,
         fadeInDuration: const Duration(seconds: 1),
+        filterQuality: FilterQuality.low,
         errorBuilder: (context, exception, stacktrace) {
           return const Text( "Image Unavailable");
         },

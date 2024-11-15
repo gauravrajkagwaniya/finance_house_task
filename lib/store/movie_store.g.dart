@@ -31,22 +31,6 @@ mixin _$MovieStore on _MovieStore, Store {
               name: '_MovieStore.featuredMovie'))
       .value;
 
-  late final _$globalErrorAtom =
-      Atom(name: '_MovieStore.globalError', context: context);
-
-  @override
-  AppError? get globalError {
-    _$globalErrorAtom.reportRead();
-    return super.globalError;
-  }
-
-  @override
-  set globalError(AppError? value) {
-    _$globalErrorAtom.reportWrite(value, super.globalError, () {
-      super.globalError = value;
-    });
-  }
-
   late final _$popularMovieListAtom =
       Atom(name: '_MovieStore.popularMovieList', context: context);
 
@@ -453,7 +437,6 @@ mixin _$MovieStore on _MovieStore, Store {
   @override
   String toString() {
     return '''
-globalError: ${globalError},
 popularMovieList: ${popularMovieList},
 nowPlayingMovieList: ${nowPlayingMovieList},
 topRatedMovieList: ${topRatedMovieList},

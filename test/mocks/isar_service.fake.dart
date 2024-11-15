@@ -1,8 +1,13 @@
 import 'package:finance_house_task/model/movie/movie.dart';
+import 'package:finance_house_task/utils/enum.dart';
 import 'package:finance_house_task/utils/util_methods.dart';
 import 'package:mockito/annotations.dart';
 
-// Generate mock classes for MovieService and FavMovieService
+// Generate mock classes for IsarService
+List<Movie> mockMovies = [
+  Movie(id: 1,),
+  Movie(id: 2,),
+];
 @GenerateMocks([IsarService])
 class IsarService {
   Future<void> initializeIsar() async {
@@ -11,15 +16,24 @@ class IsarService {
 
 
   Future<List<Movie>> getAllMovies()async{
-    return [];
+    return mockMovies;
   }
 
   Future<void> deleteMovie(Movie movie) async {
-    return;
+    mockMovies.remove(movie);
   }
 
   Future<void> addMovie(Movie movie) async {
+    mockMovies.remove(movie);
+  }
+
+  // save res to cache
+  Future<void> saveResToCache(MovieSectionsEnum section, String url, String res) async {
     return;
+  }
+
+  Future<Map<String, dynamic>?> getResFromCache(String url) async {
+    return {};
   }
 
 
