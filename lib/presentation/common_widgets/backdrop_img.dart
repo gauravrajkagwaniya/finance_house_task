@@ -3,6 +3,7 @@ import 'package:finance_house_task/utils/assets_links.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/util_methods.dart';
+import 'image_cache_custom.dart';
 
 class BackdropImg extends StatelessWidget {
   final String? backdropPath;

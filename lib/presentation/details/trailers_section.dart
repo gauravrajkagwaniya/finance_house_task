@@ -1,4 +1,3 @@
-import 'package:finance_house_task/model/movie/trailer.dart';
 import 'package:finance_house_task/presentation/common_widgets/custom_video_player.dart';
 import 'package:finance_house_task/presentation/common_widgets/no_data_widget.dart';
 import 'package:finance_house_task/presentation/details/video_grid_widget.dart';
@@ -19,11 +18,10 @@ class TrailersSection extends StatefulWidget {
 class _TrailersSectionState extends State<TrailersSection> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<RootStore>(context, listen: true).movieStore.getTrailers(
-        Provider.of<RootStore>(context).movieStore.movieDetails!.id);
     return StoreObserver(builder: (RootStore store, context) {
-      return store.movieStore.trailers != null
-          ? Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+      return store.movieStore.isTrailerLoading
+          ? const CircularProgressIndicator()
+          : Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,11 +70,13 @@ class _TrailersSectionState extends State<TrailersSection> {
                             },
                           ),
                         )
-                      : const NoDataWidget(text: "Trailer are not available"),
+                      : SizedBox(
+                          width: UtilMethods.mediaSize(context).width * .90,
+                          child: const NoDataWidget(
+                              text: "Trailers are not available")),
                 ],
               )
-            ])
-          : const CircularProgressIndicator();
+            ]);
     });
   }
 }

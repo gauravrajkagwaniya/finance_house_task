@@ -2,6 +2,7 @@ import 'package:finance_house_task/presentation/common_widgets/backdrop_img.dart
 
 import '../../global.dart';
 import '../../model/movie/movie.dart';
+import 'image_cache_custom.dart';
 
 
 class CustomList extends StatelessWidget {
@@ -66,7 +67,7 @@ class CustomList extends StatelessWidget {
                               // primary: Colors.white,
                               // onPrimary: Colors.black,
                             ),
-                            label: Text('Watch Now'),
+                            label: const Text('Watch Now'),
                           ),
                         ],
                       ),

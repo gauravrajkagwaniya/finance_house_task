@@ -17,7 +17,7 @@ Trailer _$TrailerFromJson(Map<String, dynamic> json) => Trailer(
       ..size = (json['size'] as num?)?.toInt()
       ..type = json['type'] as String?
       ..official = json['official'] as bool?
-      ..published_at = json['published_at'] as String?;
+      ..publishedAt = json['published_at'] as String?;
 
 Map<String, dynamic> _$TrailerToJson(Trailer instance) => <String, dynamic>{
       'id': instance.id,
@@ -29,5 +29,5 @@ Map<String, dynamic> _$TrailerToJson(Trailer instance) => <String, dynamic>{
       'size': instance.size,
       'type': instance.type,
       'official': instance.official,
-      'published_at': instance.published_at,
+      'published_at': instance.publishedAt,
     };

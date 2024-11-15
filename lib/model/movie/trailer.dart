@@ -34,7 +34,7 @@ class Trailer {
   late bool? official;
 
   @JsonKey(name:"published_at")
-  late String? published_at;
+  late String? publishedAt;
 
 
 

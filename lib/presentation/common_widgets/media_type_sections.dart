@@ -1,7 +1,8 @@
+import 'package:finance_house_task/presentation/movie_listing/movie_listing_screen.dart';
+
 import '../../global.dart';
 import '../../model/movie/movie.dart';
 import '../../utils/enum.dart';
-import '../view_all/view_all_screen.dart';
 import 'movie_item.dart';
 
 class MediaTypeSection extends StatelessWidget {
@@ -36,7 +37,7 @@ class MediaTypeSection extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ViewAllScreen(
+                        builder: (context) => MovieListingScreen(
                           movieSectionsEnum: movieSectionsEnum,
                           store: store.movieStore,
                         ),

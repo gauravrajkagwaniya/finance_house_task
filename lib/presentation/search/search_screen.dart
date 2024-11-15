@@ -12,7 +12,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _textController = TextEditingController();
     String query="";
 
   @override
@@ -38,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
       Provider
           .of<RootStore>(context, listen: false)
           .movieStore
-          .getSearchedMovie(query: query??"");
+          .getSearchedMovie(query: query);
     }
   }
 

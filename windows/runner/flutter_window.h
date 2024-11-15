@@ -8,10 +8,10 @@
 
 #include "win32_window.h"
 
-// A window that does nothing but host a Flutter view_all.
+// A window that does nothing but host a Flutter movie_listing.
 class FlutterWindow : public Win32Window {
  public:
-  // Creates a new FlutterWindow hosting a Flutter view_all running |project|.
+  // Creates a new FlutterWindow hosting a Flutter movie_listing running |project|.
   explicit FlutterWindow(const flutter::DartProject& project);
   virtual ~FlutterWindow();
 

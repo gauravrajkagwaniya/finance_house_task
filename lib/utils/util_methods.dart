@@ -1,11 +1,9 @@
 import 'dart:ui';
 
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:finance_house_task/global.dart';
-import 'package:finance_house_task/presentation/common_widgets/no_data_widget.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 abstract class UtilMethods {
   /// Creates a delayed Future that completes after 200 milliseconds.
@@ -30,9 +28,9 @@ abstract class UtilMethods {
   }
 
   /// Prints a debug message to the console if in debug mode.
-  static void kPrintMessage(String message) {
+  static void kPrintMessage(String message, {id = "my_first_log"}) {
     if (kDebugMode) {
-      print("==debugMessage==> $message");
+      debugPrint("==debugMessage ==> $id =>$message");
     }
   }
 
@@ -156,51 +154,31 @@ abstract class UtilMethods {
   }
 
   /// Show SnackBar based on network status
-  static void showNetworkStatusSnackBar(
-      BuildContext context, ConnectivityResult result) {
-    final snackBarContent = result == ConnectivityResult.none
-        ? 'No Internet Connection'
-        : 'Connected to the Internet';
-
-    SnackBar(
-      content: Text(snackBarContent),
-      duration: const Duration(seconds: 2),
-      backgroundColor:
-          result == ConnectivityResult.none ? Colors.red : Colors.green,
-    );
+  static void showToast(Object e) {
+    UtilMethods.kPrintMessage("${e.runtimeType}");
+    final message = e.runtimeType.toString().contains("ClientSocketException")
+        ? "Internet not available"
+        : "Something went wrong";
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Styles.blackColors,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
-}
 
-class ImageCacheCustom extends StatelessWidget {
-  final String url;
-  final double height;
-  final double width;
-
-
-  const ImageCacheCustom({super.key, required this.url,  this.height=150,  this.width=150});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: FastCachedImage(
-        url: url,
-        fit: BoxFit.cover,
-        fadeInDuration: const Duration(seconds: 1),
-        errorBuilder: (context, exception, stacktrace) {
-          return const NoDataWidget(text: "Unavailable");
-        },
-        loadingBuilder: (context, progress) {
-          debugPrint(
-              'Progress: ${progress.isDownloading} ${progress.downloadedBytes} / ${progress.totalBytes}');
-          return UtilMethods.getSimmerWidget(
-            context: context,
-            height: height,
-            width: width,
-          );
-        },
-      ),
-    );
+  /// Show SnackBar based on center
+  static void showPositionedToast(String message,
+      {ToastGravity? gravity = ToastGravity.CENTER}) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: gravity,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Styles.blackColors,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }

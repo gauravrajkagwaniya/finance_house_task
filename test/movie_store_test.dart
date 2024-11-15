@@ -2,9 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:finance_house_task/store/movie_store.dart';
 import 'package:finance_house_task/service/movie_service.dart';
 import 'package:mockito/mockito.dart';
-
-import 'package:finance_house_task/model/movie/movie.dart';
-
 import 'mocks/mock_services.dart';
 
 // Create Mock classes for the service
@@ -147,7 +144,7 @@ void main() {
       // };
 
       /// Trigger the fetch
-      await movieStore;
+      movieStore;
       //
       // // Validate that the movie store has the correct data
       expect(movieStore.isAllLoaded, true);

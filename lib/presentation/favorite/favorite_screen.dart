@@ -11,44 +11,42 @@ class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreObserver(builder: (RootStore store, context) {
-      Provider.of<RootStore>(context, listen: true)
-          .movieStore
-          .getFavMovieList();
+      final favMovies = store.movieStore.favMovies;
       return Scaffold(
           appBar: AppBar(),
-          body: store.movieStore.favMovies.isNotEmpty
-              ? ListView.builder(
-                  itemCount: store.movieStore.favMovies.length,
+          body: favMovies.isEmpty
+              ? SizedBox(
+                  height: UtilMethods.mediaSize(context).height,
+                  width: UtilMethods.mediaSize(context).width,
+                  child: const Center(
+                      child: NoDataWidget(
+                    text: 'No Favorites Available',
+                    fromFavScreen: true,
+                  )))
+              : ListView.builder(
+                  itemCount: favMovies.length,
                   itemBuilder: (context, index) => CustomInkWell(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailsScreen(
-                                    movie: store.movieStore.favMovies[index]),
+                                builder: (context) =>
+                                    DetailsScreen(movie: favMovies[index]),
                               ));
                         },
                         radius: 15,
                         child: Dismissible(
-                          key: Key(index.toString()),
+                          key: Key(favMovies[index].id.toString()),
+                          direction: DismissDirection.endToStart,
                           background: slideLeftBackground(context),
                           onDismissed: (_) {
-                            store.movieStore.removeFav(
-                                index: index,
-                                movie: store.movieStore.favMovies[index]);
+                            store.movieStore.removeFav(favMovies[index]);
                           },
                           child: CustomList(
-                            movie: store.movieStore.favMovies[index],
+                            movie: favMovies[index],
                           ),
                         ),
-                      ))
-              : SizedBox(
-                  height: UtilMethods.mediaSize(context).height,
-                  width: UtilMethods.mediaSize(context).width,
-                  child: const Center(
-                      child: NoDataWidget(
-                    text: 'No Favorites Available',fromFavScreen: true,
-                  ))));
+                      )));
     });
   }
 

@@ -1,13 +1,10 @@
-import 'dart:convert';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finance_house_task/global.dart';
-import 'package:finance_house_task/service/cache_service.dart';
 import 'package:finance_house_task/service/fav_movie_service.dart';
 import 'package:finance_house_task/service/movie_service.dart';
 import 'package:finance_house_task/store/root_store.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:isar/isar.dart';
 import 'package:mobx/mobx.dart';
-
 import '../model/movie/movie.dart';
 import '../model/movie/trailer.dart';
 import '../utils/enum.dart';
@@ -24,8 +21,11 @@ abstract class _MovieStore with Store {
     getPopularMovies();
     getNowPlaying();
     getTopRated();
+    getFavMovieList();
   }
 
+  @observable
+  AppError? globalError; // to catch all error
   // Observable properties to hold movie lists and other state values
   @observable
   List<Movie> popularMovieList = [];
@@ -51,6 +51,8 @@ abstract class _MovieStore with Store {
   bool isLoadingDetails = false;
   @observable
   bool isLoadingQuery = false;
+  @observable
+  bool isTrailerLoading = false;
 
   // Pagination related state variables
   @observable
@@ -72,8 +74,7 @@ abstract class _MovieStore with Store {
 
   // Computed property to check if a movie is marked as a favorite
   @computed
-  bool get isMovieFav =>
-      favMovies.any((favMovie) => favMovie.id == movieDetails?.id);
+  Iterable<Id> get favMovieIdList => favMovies.map((favMovie) => favMovie.id);
 
   // Computed property to check if all movie sections have finished loading
   @computed
@@ -115,44 +116,39 @@ abstract class _MovieStore with Store {
   // Fetches popular movies from the service and updates the store
   @action
   Future<void> getPopularMovies({bool isForceRefresh = false}) async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult != ConnectivityResult.none) {
-      if (isLoadingPopular) {
+    if (isLoadingPopular) {
+      return;
+    }
+    isLoadingPopular = true;
+    try {
+      final movieData = await MovieService()
+          .getPopularMovies(pageNo: isForceRefresh ? 1 : popularPage + 1);
+      if (movieData == null) {
         return;
       }
-      isLoadingPopular = true;
-      try {
-        final movieData = await MovieService()
-            .getPopularMovies(pageNo: isForceRefresh ? 1 : popularPage + 1);
-        final movieList = movieData['data'];
-        popularPage = movieData['page'];
-        UtilMethods.kPrintMessage("Popular page::  $popularPage");
+      final movieList = movieData['data'];
+      popularPage = movieData['page'];
+      UtilMethods.kPrintMessage("Popular page::  $popularPage");
 
-        // If it's a forced refresh, reset the movie list
-        if (isForceRefresh) {
-          popularMovieList = movieList ?? [];
-        } else {
-          popularMovieList = [...popularMovieList, ...?movieList];
-        }
-
-        UtilMethods.kPrintMessage(
-            "popularMovieList::  ${popularMovieList.length}");
-
-        // Remove duplicates from the list
-        helperFunRemoveDupli(popularMovieList);
-      } catch (e) {
-        final data = await CacheService().getStringToObj(CacheService.popularDataKey);
-        if (data != null) {
-          popularMovieList = data;
-        }
-      } finally {
-        isLoadingPopular = false;
+      // If it's a forced refresh, reset the movie list
+      if (isForceRefresh) {
+        popularMovieList = movieList ?? [];
+      } else {
+        popularMovieList = [...popularMovieList, ...?movieList];
       }
-    } else {
-      final data = await CacheService().getStringToObj(CacheService.popularDataKey);
-      if (data != null) {
-        popularMovieList = data;
-      }
+
+      UtilMethods.kPrintMessage(
+          "popularMovieList::  ${popularMovieList.length}");
+
+      // Remove duplicates from the list
+      helperFunRemoveDuplicates(popularMovieList);
+    } catch (e) {
+      //todo handle error and toast
+      UtilMethods.kPrintMessage("Error getPopularMovies: $e");
+      UtilMethods.showToast(e);
+      return;
+    } finally {
+      isLoadingPopular = false;
     }
   }
 
@@ -160,44 +156,35 @@ abstract class _MovieStore with Store {
   @action
   Future<void> getNowPlaying(
       {int pageNo = 1, bool isForceRefresh = false}) async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult != ConnectivityResult.none) {
-      if (isLoadingNowPlaying) {
-        return;
-      }
-      isLoadingNowPlaying = true;
-      try {
-        final movieData = await MovieService()
-            .getNowPlaying(pageNo: isForceRefresh ? 1 : nowPlayingPage + 1);
-        final movieList = movieData['data'];
-        nowPlayingPage = movieData['page'];
-        UtilMethods.kPrintMessage("nowPlayingPage ::  $nowPlayingPage");
+    if (isLoadingNowPlaying) {
+      return;
+    }
+    isLoadingNowPlaying = true;
+    try {
+      final movieData = await MovieService()
+          .getNowPlaying(pageNo: isForceRefresh ? 1 : nowPlayingPage + 1);
+      final movieList = movieData?['data'];
+      nowPlayingPage = movieData?['page'];
+      UtilMethods.kPrintMessage("nowPlayingPage ::  $nowPlayingPage");
 
-        // Update the now playing movie list
-        if (isForceRefresh) {
-          nowPlayingMovieList = movieList ?? [];
-        } else {
-          nowPlayingMovieList = [...nowPlayingMovieList, ...?movieList];
-        }
+      // Update the now playing movie list
+      if (isForceRefresh) {
+        nowPlayingMovieList = movieList ?? [];
+      } else {
+        nowPlayingMovieList = [...nowPlayingMovieList, ...?movieList];
+      }
 
-        // Remove duplicates
-        helperFunRemoveDupli(nowPlayingMovieList);
-        UtilMethods.kPrintMessage(
-            "nowPlayingMovieList::  ${nowPlayingMovieList.length}");
-      } catch (e) {
-        final data =
-            await CacheService().getStringToObj(CacheService.nowPlayingDataKey);
-        if (data != null) {
-          nowPlayingMovieList = data;
-        }
-      } finally {
-        isLoadingNowPlaying = false;
-      }
-    } else {
-      final data = await CacheService().getStringToObj(CacheService.nowPlayingDataKey);
-      if (data != null) {
-        nowPlayingMovieList = data;
-      }
+      // Remove duplicates
+      helperFunRemoveDuplicates(nowPlayingMovieList);
+      UtilMethods.kPrintMessage(
+          "nowPlayingMovieList::  ${nowPlayingMovieList.length}");
+    } catch (e) {
+      //todo handle error and toast
+      UtilMethods.kPrintMessage("Error getNowPlaying: $e");
+      UtilMethods.showToast(e);
+      return;
+    } finally {
+      isLoadingNowPlaying = false;
     }
   }
 
@@ -205,41 +192,30 @@ abstract class _MovieStore with Store {
   @action
   Future<void> getTopRated(
       {int pageNo = 1, bool isForceRefresh = false}) async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult != ConnectivityResult.none) {
-      if (isLoadingTopRated) {
-        return;
-      }
-      isLoadingTopRated = true;
-      try {
-        final movieData = await MovieService()
-            .getTopRated(pageNo: isForceRefresh ? 1 : topRatedPage + 1);
-        final movieList = movieData['data'];
-        topRatedPage = movieData['page'];
-        UtilMethods.kPrintMessage("topRatedMovieList page::  $topRatedPage");
+    if (isLoadingTopRated) {
+      return;
+    }
+    isLoadingTopRated = true;
+    try {
+      final movieData = await MovieService()
+          .getTopRated(pageNo: isForceRefresh ? 1 : topRatedPage + 1);
+      if (movieData == null) return; // suppressing error for page 2 and more
+      final movieList = movieData['data'];
+      topRatedPage = movieData['page'];
+      UtilMethods.kPrintMessage("topRatedMovieList page::  $topRatedPage");
 
-        // Update the top-rated movie list
-        if (isForceRefresh) {
-          topRatedMovieList = movieList ?? [];
-        } else {
-          topRatedMovieList = [...topRatedMovieList, ...?movieList];
-        }
-
-        // Remove duplicates
-        helperFunRemoveDupli(topRatedMovieList);
-      } catch (e) {
-        final data = await CacheService().getStringToObj(CacheService.topRatedDataKey);
-        if (data != null) {
-          topRatedMovieList = data;
-        }
-      } finally {
-        isLoadingTopRated = false;
+      // Update the top-rated movie list
+      if (isForceRefresh) {
+        topRatedMovieList = movieList ?? [];
+      } else {
+        topRatedMovieList = [...topRatedMovieList, ...?movieList];
       }
-    } else {
-      final data = await CacheService().getStringToObj(CacheService.topRatedDataKey);
-      if (data != null) {
-        topRatedMovieList = data;
-      }
+      // Remove duplicates
+      helperFunRemoveDuplicates(topRatedMovieList);
+    } catch (e) {
+      return;
+    } finally {
+      isLoadingTopRated = false;
     }
   }
 
@@ -273,7 +249,7 @@ abstract class _MovieStore with Store {
       final data = await MovieService().getMovieDetails(movieId: movieId);
       movieDetails = data ?? null;
     } catch (e) {
-      print(e);
+      UtilMethods.kPrintMessage(e.toString());
     }
   }
 
@@ -289,6 +265,7 @@ abstract class _MovieStore with Store {
     try {
       final movieData = await MovieService()
           .getSearchedMovie(pageNo: searchPage + 1, query: query);
+      if (movieData == null) return;
       final movieList = movieData['data'];
       searchPage = movieData['page'];
       totalSearchPage = movieData['total_pages'];
@@ -297,11 +274,12 @@ abstract class _MovieStore with Store {
       }
 
       // Remove duplicates from the searched list
-      helperFunRemoveDupli(searchedMovies);
+      helperFunRemoveDuplicates(searchedMovies);
       UtilMethods.kPrintMessage(
           "Search Query: $query, Page No: $searchPage, Total Pages: $totalSearchPage, Searched Movies: ${searchedMovies.length}");
-    } catch (e) {
-      UtilMethods.kPrintMessage("Error getSearchedMovie: " + e.toString());
+      if (searchedMovies.isEmpty) {
+        UtilMethods.showPositionedToast("Movie not available");
+      }
     } finally {
       isLoadingQuery = false;
     }
@@ -309,37 +287,53 @@ abstract class _MovieStore with Store {
 
   // Fetches trailers for a specific movie
   @action
-  Future<void> getTrailers(int movieId) async {
-    final data = await MovieService().getTrailer(movieId: movieId);
-    trailers = data;
+  Future<void> getTrailers() async {
+    try {
+      trailers = [];
+      if (movieDetails != null) {
+        isTrailerLoading = true;
+        final data = await MovieService().getTrailer(movieId: movieDetails!.id);
+        trailers = data;
+      }
+    } finally {
+      isTrailerLoading = false;
+    }
   }
 
-  // Helper function to remove duplicate movies based on their ID
-  void helperFunRemoveDupli(List<Movie> movie) {
+// Helper function to remove duplicate movies based on their ID
+  void helperFunRemoveDuplicates(List<Movie> movie) {
     final ids = movie.map((movie) => movie.id).toSet();
     movie.retainWhere((movie) => ids.remove(movie.id));
   }
 
-  // Fetch the list of favorite movies from storage
+// Fetch the list of favorite movies from storage
   @action
   Future<void> getFavMovieList() async {
     favMovies = await FavMovieService().getAllFavMovie();
   }
 
-  // Adds a movie to the list of favorites
+// Adds a movie to the list of favorites
   @action
   Future<void> addToFav(Movie movie) async {
-    await FavMovieService().addFavMovie(movie: movie);
-    isFavMovie = true;
+    favMovieIdList.contains(movie.id)
+        ? UtilMethods.showPositionedToast("Already added",
+            gravity: ToastGravity.BOTTOM)
+        : {
+            UtilMethods.showPositionedToast("Added to favorites",
+                gravity: ToastGravity.BOTTOM),
+            await FavMovieService().addFavMovie(movie: movie),
+            favMovies = [...favMovies, movie]
+          };
   }
 
-  // Removes a movie from the list of favorites
+// Removes a movie from the list of favorites
   @action
-  Future<void> removeFav({int? index, required Movie movie}) async {
-    if (index != null) {
-      favMovies.removeAt(index);
-    }
+  Future<void> removeFav(Movie movie) async {
     await FavMovieService().removeFavMovie(movie);
-    isFavMovie = false;
+    favMovies.remove(movie);
+    if (favMovies.isEmpty) {
+      getFavMovieList();
+    }
+    UtilMethods.kPrintMessage("fav movoe length  $favMovies");
   }
 }

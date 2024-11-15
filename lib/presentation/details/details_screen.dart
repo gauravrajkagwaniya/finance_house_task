@@ -4,6 +4,7 @@ import 'package:finance_house_task/presentation/details/trailers_section.dart';
 import 'package:finance_house_task/store/root_store.dart';
 import '../../global.dart';
 import '../common_widgets/backdrop_img.dart';
+import '../common_widgets/image_cache_custom.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Movie movie;
@@ -19,6 +20,10 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       body: StoreObserver(builder: (RootStore store, context) {
         final Movie? movieDetail = store.movieStore.movieDetails;
+        final bool isFavMovie = movieDetail != null
+            ? store.movieStore.favMovieIdList.contains(movieDetail.id)
+            : false;
+
         return movieDetail == null
             ? UtilMethods.getSimmerTvWidget(context: context)
             : BackdropImg(
@@ -41,8 +46,8 @@ class DetailsScreen extends StatelessWidget {
                           fit: StackFit.expand,
                           children: [
                             // Background image
-                        ImageCacheCustom(
-                          url:   movieDetail.posterPath != null
+                            ImageCacheCustom(
+                              url: movieDetail.posterPath != null
                                   ? UtilMethods.imgUrl(
                                       movieDetail.posterPath ?? '')
                                   : AssetsLinks.imgPlaceholder,
@@ -101,15 +106,10 @@ class DetailsScreen extends StatelessWidget {
                                       const SizedBox(width: 10),
                                       IconButton(
                                         onPressed: () {
-                                          if (store.movieStore.isMovieFav) {
-                                            store.movieStore
-                                                .removeFav(movie: movie);
-                                          } else {
-                                            store.movieStore.addToFav(movie);
-                                          }
+                                          store.movieStore.addToFav(movie);
                                         },
                                         icon: SvgPicture.asset(
-                                          store.movieStore.isMovieFav
+                                          isFavMovie
                                               ? AssetsLinks.favoriteFill
                                               : AssetsLinks.favorite,
                                           color: Styles.netflixColors,
@@ -231,15 +231,19 @@ class DetailsScreen extends StatelessWidget {
                   ),
                 ));
       }),
-      floatingActionButton: FloatingActionButton(
-        /// Trailers
-        onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => CustomVideoPlayer(),));
-          UtilMethods.showBottomSheet(context, const TrailersSection());
-        },
-        tooltip: "Watch Trailers",
-        child: const Icon(FontAwesomeIcons.film),
-      ),
+      floatingActionButton: StoreObserver(builder: (RootStore store, context) {
+        return store.movieStore.movieDetails != null
+            ? FloatingActionButton(
+                /// Trailers
+                onPressed: () {
+                  store.movieStore.getTrailers();
+                  UtilMethods.showBottomSheet(context, const TrailersSection());
+                },
+                tooltip: "Watch Trailers",
+                child: const Icon(FontAwesomeIcons.film),
+              )
+            : Container();
+      }),
     );
   }
 }

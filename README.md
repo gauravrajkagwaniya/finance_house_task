@@ -1,11 +1,11 @@
 # Flutter Project
 
-
-
 ![App Light modeDemo](https://drive.google.com/uc?export=view&id=1z8D4kLss1uHg-27s8bW8H5ErJb_z2hxu)
 ![App Dark mode Demo](https://drive.google.com/uc?export=view&id=1z8D4kLss1uHg-27s8bW8H5ErJb_z2hxu)
 
-This project is built using Flutter and utilizes several packages for state management, networking, routing, local storage, and more. Below are the instructions to set up the project, explanations of the dependencies, assumptions made during development, and instructions on how to run unit tests.
+This project is built using Flutter and utilizes several packages for state management, networking,
+routing, local storage, and more. Below are the instructions to set up the project, explanations of
+the dependencies, assumptions made during development, and instructions on how to run unit tests.
 
 ## Table of Contents
 
@@ -50,8 +50,24 @@ Make sure you have the following installed:
 
    After setting up the dependencies, you can run the app on a connected device or emulator using:
 
+Env are setup, run the following commands or edit the configs in android Studio
+
+For dev
+
    ```bash
-   flutter run
+    flutter run -t lib/main_dev.dart
+   ```
+
+For Stag
+
+   ```bash
+    flutter run -t lib/main_stag.dart
+   ```
+
+For prod
+
+   ```bash
+    flutter run -t lib/main_prod.dart
    ```
 
 ---
@@ -105,12 +121,13 @@ The following assumptions were made while developing this project:
 - The target platform for this project is both Android and iOS.
 - The project makes use of local storage (`isar`) for storing persistent data and caching.
 - Network connectivity is required for certain features (e.g., fetching data from an API).
-- The app uses MobX for state management and relies on `flutter_mobx` and `mobx_codegen` for reactive state handling.
+- The app uses MobX for state management and relies on `flutter_mobx` and `mobx_codegen` for
+  reactive state handling.
 - The app requires localized content using `flutter_localizations` and `intl`.
 
 - **TMDB API Integration:**
 - All APIS are implemented
-- 
+-
 - **Home Screen**
 - Key Highlights=> Carousel;
 - limited to 10 item in each sections
@@ -121,39 +138,40 @@ The following assumptions were made while developing this project:
 
 - **"View All" sections**
 - Caching, Pagination or Infinite Scroll Api based done,
-- Key Highlights=> **Pagination or Infinite Scroll**: The app implements pagination or infinite scroll for the following sections:
-   - **Search**
-   - **Popular Movies**
-   - **Now Playing**
-   - **Top Rated Movies (in "View All" sections)**
-  
+- Key Highlights=> **Pagination or Infinite Scroll**: The app implements pagination or infinite
+  scroll for the following sections:
+    - **Search**
+    - **Popular Movies**
+    - **Now Playing**
+    - **Top Rated Movies (in "View All" sections)**
+
 
 - **Search Screen**
 - search bar for users to search movies by title.
 - Display search results in real-time as the user types.
-  - Also pagination/ infinite scroll.
+    - Also pagination/ infinite scroll.
 - Gridview for each result should show the movie poster, title, and rating.
 
 
 - **Favorite Movie Screen**
-- Isar handing the offline storage. 
+- Isar handing the offline storage.
 
 
 - **Settings Screen**
-- App theme inspired by Netflix. 
-- 
+- App theme inspired by Netflix.
+-
 - **Watch Trailers Screen**
 - list of videos in bottom sheet and can be played title in player.
 - flutter video player doesn't support youtube format so used `youtube flutter player`.
 - **Performance Optimization**
 - Infinite scroll is implementation to handle large data.
 
-
 ---
 
 ## Clean Architecture Folder Structure
 
-The project follows the principles of **Clean Architecture** to separate concerns and ensure maintainability. Here's how the folder structure is organized:
+The project follows the principles of **Clean Architecture** to separate concerns and ensure
+maintainability. Here's how the folder structure is organized:
 
 ```
 lib/
@@ -176,25 +194,36 @@ lib/
 
 ### Folder Breakdown:
 
-- **`models/`**: This folder contains all the data models and entities used throughout the app. Models represent the raw data structures that are used to interact with APIs or databases.
+- **`models/`**: This folder contains all the data models and entities used throughout the app.
+  Models represent the raw data structures that are used to interact with APIs or databases.
 
-- **`services/`**: Contains business logic and services responsible for handling network requests, API communication, and managing data.
-   - **`etc..`** 
-- **`stores/`**: This folder houses all the **MobX** stores, which are used for reactive state management in the app.
-   - **`etc..`** all store files in which whole app bussinus logic is written.
+- **`services/`**: Contains business logic and services responsible for handling network requests,
+  API communication, and managing data.
+    - **`etc..`**
+- **`stores/`**: This folder houses all the **MobX** stores, which are used for reactive state
+  management in the app.
+    - **`etc..`** all store files in which whole app bussinus logic is written.
 - **`presentation/`**: This is the UI layer, split by features/modules:
-   - **`custom/`**: Custom UI components and widgets that can be reused across multiple parts of the app.
-   - **`detail/`**: The **Movie Detail** screen, containing the UI for viewing a detailed movie page.
-   - **`movie_list/`**: This folder holds the UI for displaying lists of movies (e.g., Popular, Now Playing, Search, Top Rated, etc.).
-   - **`etc..`**
+    - **`custom/`**: Custom UI components and widgets that can be reused across multiple parts of
+      the app.
+    - **`detail/`**: The **Movie Detail** screen, containing the UI for viewing a detailed movie
+      page.
+    - **`movie_list/`**: This folder holds the UI for displaying lists of movies (e.g., Popular, Now
+      Playing, Search, Top Rated, etc.).
+    - **`etc..`**
 - **`utils/`**: Contains helper functions, constants, enums, and asset links.
-   - **`helpers/`**: Helper methods like formatting functions, date utilities, etc.
-   - **`strings.dart`**: A file where all the text constants (like button labels, screen titles) are defined.
-   - **`asset_links.dart`**: Contains constants for URLs or paths to assets like images, videos, or icons.
-   - **`enums.dart`**: Holds the enums used throughout the app (e.g., movie genres, movie sorting options).
-   - **`etc..`**
-- **`router/`**: Manages navigation across the app using either `go_router` or `auto_route`. This centralizes routing logic and ensures scalability.
- - At first though out it but didn't used.
+    - **`helpers/`**: Helper methods like formatting functions, date utilities, etc.
+    - **`strings.dart`**: A file where all the text constants (like button labels, screen titles)
+      are defined.
+    - **`asset_links.dart`**: Contains constants for URLs or paths to assets like images, videos, or
+      icons.
+    - **`enums.dart`**: Holds the enums used throughout the app (e.g., movie genres, movie sorting
+      options).
+    - **`etc..`**
+- **`router/`**: Manages navigation across the app using either `go_router` or `auto_route`. This
+  centralizes routing logic and ensures scalability.
+- At first though out it but didn't used.
+
 ---
 
 ## Running Unit Tests
@@ -205,7 +234,8 @@ To run unit tests for the project, you can use the following command:
 flutter test test/movie_store_test.dart
 ```
 
-This will run the tests in the specified file (`movie_store_test.dart`). If you'd like to run all the tests in the `test` directory, you can use:
+This will run the tests in the specified file (`movie_store_test.dart`). If you'd like to run all
+the tests in the `test` directory, you can use:
 
 ```bash
 flutter test
@@ -217,15 +247,18 @@ The unit tests use the following libraries for mocking and testing:
 
 - **`mockito`**: For creating mock objects and stubbing methods during testing.
 - **`test`**: The default Dart testing framework.
-- Unit test cases written for store actions which fetching the data. Basically on API service and core business logic. 
+- Unit test cases written for store actions which fetching the data. Basically on API service and
+  core business logic.
 
-You can write unit tests by following this structure and mocking dependencies as needed using `mockito`.
+You can write unit tests by following this structure and mocking dependencies as needed using
+`mockito`.
 
 ---
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ```
 
 ### Key Updates:

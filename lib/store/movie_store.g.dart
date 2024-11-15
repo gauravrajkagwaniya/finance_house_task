@@ -9,13 +9,13 @@ part of 'movie_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MovieStore on _MovieStore, Store {
-  Computed<bool>? _$isMovieFavComputed;
+  Computed<Iterable<int>>? _$favMovieIdListComputed;
 
   @override
-  bool get isMovieFav =>
-      (_$isMovieFavComputed ??= Computed<bool>(() => super.isMovieFav,
-              name: '_MovieStore.isMovieFav'))
-          .value;
+  Iterable<int> get favMovieIdList => (_$favMovieIdListComputed ??=
+          Computed<Iterable<int>>(() => super.favMovieIdList,
+              name: '_MovieStore.favMovieIdList'))
+      .value;
   Computed<bool>? _$isAllLoadedComputed;
 
   @override
@@ -30,6 +30,22 @@ mixin _$MovieStore on _MovieStore, Store {
           Computed<List<Movie>>(() => super.featuredMovie,
               name: '_MovieStore.featuredMovie'))
       .value;
+
+  late final _$globalErrorAtom =
+      Atom(name: '_MovieStore.globalError', context: context);
+
+  @override
+  AppError? get globalError {
+    _$globalErrorAtom.reportRead();
+    return super.globalError;
+  }
+
+  @override
+  set globalError(AppError? value) {
+    _$globalErrorAtom.reportWrite(value, super.globalError, () {
+      super.globalError = value;
+    });
+  }
 
   late final _$popularMovieListAtom =
       Atom(name: '_MovieStore.popularMovieList', context: context);
@@ -207,6 +223,22 @@ mixin _$MovieStore on _MovieStore, Store {
     });
   }
 
+  late final _$isTrailerLoadingAtom =
+      Atom(name: '_MovieStore.isTrailerLoading', context: context);
+
+  @override
+  bool get isTrailerLoading {
+    _$isTrailerLoadingAtom.reportRead();
+    return super.isTrailerLoading;
+  }
+
+  @override
+  set isTrailerLoading(bool value) {
+    _$isTrailerLoadingAtom.reportWrite(value, super.isTrailerLoading, () {
+      super.isTrailerLoading = value;
+    });
+  }
+
   late final _$popularPageAtom =
       Atom(name: '_MovieStore.popularPage', context: context);
 
@@ -376,8 +408,8 @@ mixin _$MovieStore on _MovieStore, Store {
       AsyncAction('_MovieStore.getTrailers', context: context);
 
   @override
-  Future<void> getTrailers(int movieId) {
-    return _$getTrailersAsyncAction.run(() => super.getTrailers(movieId));
+  Future<void> getTrailers() {
+    return _$getTrailersAsyncAction.run(() => super.getTrailers());
   }
 
   late final _$getFavMovieListAsyncAction =
@@ -400,9 +432,8 @@ mixin _$MovieStore on _MovieStore, Store {
       AsyncAction('_MovieStore.removeFav', context: context);
 
   @override
-  Future<void> removeFav({int? index, required Movie movie}) {
-    return _$removeFavAsyncAction
-        .run(() => super.removeFav(index: index, movie: movie));
+  Future<void> removeFav(Movie movie) {
+    return _$removeFavAsyncAction.run(() => super.removeFav(movie));
   }
 
   late final _$_MovieStoreActionController =
@@ -422,6 +453,7 @@ mixin _$MovieStore on _MovieStore, Store {
   @override
   String toString() {
     return '''
+globalError: ${globalError},
 popularMovieList: ${popularMovieList},
 nowPlayingMovieList: ${nowPlayingMovieList},
 topRatedMovieList: ${topRatedMovieList},
@@ -433,6 +465,7 @@ isLoadingNowPlaying: ${isLoadingNowPlaying},
 isLoadingTopRated: ${isLoadingTopRated},
 isLoadingDetails: ${isLoadingDetails},
 isLoadingQuery: ${isLoadingQuery},
+isTrailerLoading: ${isTrailerLoading},
 popularPage: ${popularPage},
 topRatedPage: ${topRatedPage},
 nowPlayingPage: ${nowPlayingPage},
@@ -440,7 +473,7 @@ searchPage: ${searchPage},
 totalSearchPage: ${totalSearchPage},
 trailers: ${trailers},
 isFavMovie: ${isFavMovie},
-isMovieFav: ${isMovieFav},
+favMovieIdList: ${favMovieIdList},
 isAllLoaded: ${isAllLoaded},
 featuredMovie: ${featuredMovie}
     ''';

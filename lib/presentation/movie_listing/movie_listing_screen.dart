@@ -6,18 +6,18 @@ import '../../store/movie_store.dart';
 import '../../store/root_store.dart';
 import '../../utils/enum.dart';
 
-class ViewAllScreen extends StatefulWidget {
+class MovieListingScreen extends StatefulWidget {
   final MovieSectionsEnum movieSectionsEnum;
   final MovieStore store;
 
-  const ViewAllScreen(
+  const MovieListingScreen(
       {super.key, required this.store, required this.movieSectionsEnum});
 
   @override
-  State<ViewAllScreen> createState() => _ViewAllScreenState();
+  State<MovieListingScreen> createState() => _MovieListingScreenState();
 }
 
-class _ViewAllScreenState extends State<ViewAllScreen> {
+class _MovieListingScreenState extends State<MovieListingScreen> {
 final ScrollController _scrollController = ScrollController();
 
   @override

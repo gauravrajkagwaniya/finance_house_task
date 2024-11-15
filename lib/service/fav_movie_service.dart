@@ -1,10 +1,6 @@
-import 'package:finance_house_task/global.dart';
 import 'package:finance_house_task/service/isar_service.dart';
 import 'package:isar/isar.dart';
-
-import '../model/movie/cache_data.dart';
 import '../model/movie/movie.dart';
-import '../utils/enum.dart';
 
 class FavMovieService {
   FavMovieService._internal();
@@ -35,7 +31,7 @@ class FavMovieService {
 
   // Function to add a movie to the list of favorite movies
   // It saves the movie to the Isar database
-  Future<void> addFavMovie({Movie? movie, bool? isFav = true}) async {
+  Future<void> addFavMovie({Movie? movie}) async {
     await isar.writeTxn(() async {
       if (movie != null) {
         isar.movies.put(movie); // Add or update the movie in the database

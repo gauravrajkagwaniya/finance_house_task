@@ -1,11 +1,8 @@
-import 'package:finance_house_task/presentation/details/details_screen.dart';
 import 'package:finance_house_task/presentation/favorite/favorite_screen.dart';
+import 'package:finance_house_task/presentation/movie_discovery/movie_discovery_screen.dart';
 import 'package:finance_house_task/presentation/search/search_screen.dart';
 import 'package:finance_house_task/presentation/settings/settings_screen.dart';
-import 'package:finance_house_task/store/root_store.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import '../global.dart';
-import 'movie_list/movie_listing_screen.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -17,30 +14,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      const MovieListingScreen(),
+      const MovieDiscoveryScreen(),
       const SearchScreen(),
       const FavoriteScreen(),
       const SettingsScreen(),
     ];
     return Scaffold(
-      body: StoreObserver(
-        builder: (RootStore store, context) {
-          Future.delayed(Duration.zero, () {
-            if (store.connectivityStore.connectivityResult[0] == ConnectivityResult.none
-            ) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('No Internet Connection'),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 2),
-              ));
-            }
-          });
-          return widgetOptions.elementAt(selectedIndex);
-        }
-      ),
+      body: widgetOptions.elementAt(selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
         showUnselectedLabels: false,
@@ -80,7 +64,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: selectedIndex,
-        // selectedItemColor: Colors.amber[800],
         onTap: (value) => setState(() {
           selectedIndex = value;
         }),

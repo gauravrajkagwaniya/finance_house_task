@@ -3,6 +3,7 @@ import 'package:finance_house_task/model/movie/movie.dart';
 import 'package:finance_house_task/presentation/details/details_screen.dart';
 
 import '../../global.dart';
+import 'image_cache_custom.dart';
 
 
 class MovieItem extends StatelessWidget {
@@ -64,7 +65,7 @@ class MovieItem extends StatelessWidget {
                           Shadow(
                             blurRadius: 6,
                             color: Colors.black.withOpacity(0.8),
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
