@@ -1,8 +1,8 @@
 # Flutter Project
 
-![App Light modeDemo](https://drive.google.com/uc?export=view&id=1z8D4kLss1uHg-27s8bW8H5ErJb_z2hxu)
-![App Dark mode Demo](https://drive.google.com/uc?export=view&id=1z8D4kLss1uHg-27s8bW8H5ErJb_z2hxu)
+![Demo](https://drive.google.com/uc?export=view&id=1cxcRjlkxYUgQHM4MAoePUTu2efYzN6LJ)
 
+https://drive.google.com/file/d/1cxcRjlkxYUgQHM4MAoePUTu2efYzN6LJ/view?usp=sharing
 This project is built using Flutter and utilizes several packages for state management, networking,
 routing, local storage, and more. Below are the instructions to set up the project, explanations of
 the dependencies, assumptions made during development, and instructions on how to run unit tests.
@@ -23,9 +23,9 @@ the dependencies, assumptions made during development, and instructions on how t
 
 Make sure you have the following installed:
 
-- Flutter (preferably the latest stable version)
+- Flutter 3.24 (preferably the latest stable version)
 - Dart SDK (bundled with Flutter)
-- Android Studio / Xcode / Visual Studio Code (for your preferred IDE)
+- Android Studio ladybug / Xcode / Visual Studio Code (for your preferred IDE)
 
 ### Steps to Setup the Project
 
@@ -93,11 +93,11 @@ For prod
 - **`flutter_svg`**: For displaying SVG images.
 - **`carousel_slider`**: For displaying carousel sliders in your app.
 - **`shimmer`**: Provides shimmer effect for loading screens.
-- **`video_player`**: To play video content.
 - **`youtube_player_flutter`**: Allows embedding YouTube videos.
 - **`isar`**: A fast NoSQL database for Flutter.
 - **`isar_flutter_libs`**: Required for working with Isar on Flutter.
-- **`connectivity_plus`**: For checking internet connectivity.
+- **`fast_cached_network_image`**: For image caching.
+- **`fluttertoast: ^8.2.8`**: For toasts.
 
 ### Development Dependencies
 
@@ -126,15 +126,18 @@ The following assumptions were made while developing this project:
 - The app requires localized content using `flutter_localizations` and `intl`.
 
 - **TMDB API Integration:**
-- All APIS are implemented
--
+- All Given APIS are implemented 
+  o Popular Movies: /movie/popular
+  o Top Rated Movies: /movie/top_rated
+  o Now Playing Movies: /movie/now_playing
+  o Search Movies: /search/movie
+  o Movie Details: /movie/{movie_id}
+
+
 - **Home Screen**
 - Key Highlights=> Carousel;
 - limited to 10 item in each sections
 - pull-to-refresh functionality for reloading data.
-
-- **Connectivity**
-- Snackbar when internet gone.
 
 - **"View All" sections**
 - Caching, Pagination or Infinite Scroll Api based done,
@@ -145,7 +148,6 @@ The following assumptions were made while developing this project:
     - **Now Playing**
     - **Top Rated Movies (in "View All" sections)**
 
-
 - **Search Screen**
 - search bar for users to search movies by title.
 - Display search results in real-time as the user types.
@@ -155,17 +157,27 @@ The following assumptions were made while developing this project:
 
 - **Favorite Movie Screen**
 - Isar handing the offline storage.
-
+- User can add and remove move from favorite screen
 
 - **Settings Screen**
-- App theme inspired by Netflix.
--
-- **Watch Trailers Screen**
-- list of videos in bottom sheet and can be played title in player.
+- App theme (Dark Mode) inspired by Netflix.
+- 
+- **Movie Videos or Watch Trailers Screen**
+- FAB => list of videos in bottom sheet and can be played in player.
 - flutter video player doesn't support youtube format so used `youtube flutter player`.
+- 
 - **Performance Optimization**
 - Infinite scroll is implementation to handle large data.
+- Toasts when internet gone.
 
+- **Error Handling &amp; Offline Support:**
+- App having offline caching for popular, top-rated, and now-playing movies.
+- Toasts when error messages, fallback data to the user and shows, handled errors such as network failures and API errors on service.
+
+
+- **Unit Testing:**
+-   Unit tests for the All API service and core business logic.
+- 
 ---
 
 ## Clean Architecture Folder Structure
@@ -190,6 +202,9 @@ lib/
 │   │   ├── asset_links.dart       # Asset paths (e.g., image URLs, icons)
 │   │   └── enums.dart             # Enums used across the app (e.g., movie categories, sort types)
 │   └── router/                    # Navigation and route management
+└──test/
+     ├──mock/                      # Mock Data Classes
+     └──test.dart                  # Tests
 ```
 
 ### Folder Breakdown:
@@ -260,8 +275,3 @@ You can write unit tests by following this structure and mocking dependencies as
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ```
-
-### Key Updates:
-- Added a **Clean Architecture Folder Structure** section with a detailed breakdown of the folder structure.
-- The app is organized into `models`, `services`, `stores`, `presentation`, `utils`, `router`, and `core` folders.
-- Inside the **`presentation/`** folder, I included modular subfolders like `custom`, `detail`, and
