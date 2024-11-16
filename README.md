@@ -1,8 +1,9 @@
-# Flutter Project
+# Finance House Task Flutter Project
 
 ![Demo](https://drive.google.com/uc?export=view&id=1cxcRjlkxYUgQHM4MAoePUTu2efYzN6LJ)
 
 https://drive.google.com/file/d/1cxcRjlkxYUgQHM4MAoePUTu2efYzN6LJ/view?usp=sharing
+
 This project is built using Flutter and utilizes several packages for state management, networking,
 routing, local storage, and more. Below are the instructions to set up the project, explanations of
 the dependencies, assumptions made during development, and instructions on how to run unit tests.
@@ -126,12 +127,14 @@ The following assumptions were made while developing this project:
 - The app requires localized content using `flutter_localizations` and `intl`.
 
 - **TMDB API Integration:**
-- All Given APIS are implemented 
-  o Popular Movies: /movie/popular
-  o Top Rated Movies: /movie/top_rated
-  o Now Playing Movies: /movie/now_playing
-  o Search Movies: /search/movie
-  o Movie Details: /movie/{movie_id}
+
+- All Given APIS are implemented
+- Popular Movies: /movie/popular
+- Top Rated Movies: /movie/top_rated
+- Now Playing Movies: /movie/now_playing
+- Search Movies: /search/movie
+- Movie Details: /movie/{movie_id}
+- Watch Movie videos: /movie/{movie_id}/video
 
 
 - **Home Screen**
@@ -151,7 +154,7 @@ The following assumptions were made while developing this project:
 - **Search Screen**
 - search bar for users to search movies by title.
 - Display search results in real-time as the user types.
-    - Also pagination/ infinite scroll.
+- Also pagination/ infinite scroll.
 - Gridview for each result should show the movie poster, title, and rating.
 
 
@@ -161,11 +164,11 @@ The following assumptions were made while developing this project:
 
 - **Settings Screen**
 - App theme (Dark Mode) inspired by Netflix.
-- 
+  
 - **Movie Videos or Watch Trailers Screen**
 - FAB => list of videos in bottom sheet and can be played in player.
 - flutter video player doesn't support youtube format so used `youtube flutter player`.
-- 
+  
 - **Performance Optimization**
 - Infinite scroll is implementation to handle large data.
 - Toasts when internet gone.
@@ -177,7 +180,7 @@ The following assumptions were made while developing this project:
 
 - **Unit Testing:**
 -   Unit tests for the All API service and core business logic.
-- 
+  
 ---
 
 ## Clean Architecture Folder Structure
@@ -273,5 +276,3 @@ You can write unit tests by following this structure and mocking dependencies as
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-```
