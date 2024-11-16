@@ -246,18 +246,25 @@ lib/
 
 ## Running Unit Tests
 
+
+
+Before running any test, you have to create the mocks, for the use this commond and it genrates all the defined classes mock of servies and store files
+
+for first time genration
+```bash
+dart run build_runner build 
+```
+for after 1st time genration
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
 To run unit tests for the project, you can use the following command at once:
 
 ```bash
  flutter test test/movie_service_test.dart && flutter test test/fav_movie_service_test.dart && flutter test test/theme_store_test.dart && flutter test test/movie_store_test.dart
 ```
 
-This will run the tests in the specified file (`movie_store_test.dart`). If you'd like to run all
-the tests in the `test` directory, you can use:
-
-```bash
-flutter test
-```
 
 ### Unit Test Libraries
 
@@ -268,8 +275,6 @@ The unit tests use the following libraries for mocking and testing:
 - Unit test cases written for store actions which fetching the data. Basically on API service and
   core business logic.
 
-You can write unit tests by following this structure and mocking dependencies as needed using
-`mockito`.
 
 ---
 
