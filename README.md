@@ -115,7 +115,7 @@ For prod
 
 ---
 
-## Assumptions
+## Assumptions 
 
 The following assumptions were made while developing this project:
 
@@ -144,7 +144,7 @@ The following assumptions were made while developing this project:
 
 - **"View All" sections**
 - Caching, Pagination or Infinite Scroll Api based done,
-- Key Highlights=> **Pagination or Infinite Scroll**: The app implements pagination or infinite
+- Key Highlights on Assumption=> **Pagination or Infinite Scroll**: The app implements pagination or infinite
   scroll for the following sections:
     - **Search**
     - **Popular Movies**
