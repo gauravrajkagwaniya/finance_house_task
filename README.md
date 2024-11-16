@@ -174,7 +174,7 @@ The following assumptions were made while developing this project:
 - Toasts when internet gone.
 
 - **Error Handling &amp; Offline Support:**
-- App having offline caching for popular, top-rated, and now-playing movies.
+- App having offline caching for popular, top-rated, and now-playing movies and also for images (Only for page 1 request).
 - Toasts when error messages, fallback data to the user and shows, handled errors such as network failures and API errors on service.
 
 
